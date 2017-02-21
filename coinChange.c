@@ -1,16 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//returns the smaller of two elements
-int min(int a, int b) {
-	if(a < b) {
-		return a;
-		}
-	else {
-		return b;
-	}
-	}
-
 int coinChange(int* coins, int coinsSize, int amount) { 
 	if(coinsSize == 0) {
 		return -1;
