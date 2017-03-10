@@ -1,6 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+/* taken from facebook code lab -- 
+ * reverse the bits of an unsigned integer. */
+
+
+//helper function which swaps the ith and jth bits
 unsigned int rev (int i, int j, unsigned int A) {
 	
 	unsigned int lo = (A >> i) & 1;
