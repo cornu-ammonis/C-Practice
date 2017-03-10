@@ -15,6 +15,15 @@ int maxSubArray(int* nums, int numsSize)
 					hasPositive = 1;
 					break;}
 			}
+			
+		//if theres a positive and first number is negative, discard it
+		if (currentMax < 0 && hasPositive) 
+			{
+				currentMax = 0;
+				tmpMax = 0;
+			}
+			
+			
 		for(i = 1; i < numsSize; i++) 
 			{
 				tmpMax += nums[i];
@@ -36,7 +45,7 @@ int maxSubArray(int* nums, int numsSize)
 
 int main()
 {
-	int testarr[] = {1};
+	int testarr[] = {-2, 1};
 	int n = sizeof(testarr)/sizeof(testarr[0]);
 	int ans = maxSubArray(testarr, n);
 	printf("testarr answer is %d \n", ans);
