@@ -44,6 +44,9 @@ int** convertToPointer(int arr[][n], int m)
 int computeRangeOverlap( int arr[][n], int m) 
 	{
 	
+	//narr[x][0] and narr[x][1] will be the original range from arr,
+	//narr[x][2] will be the "counter" for the number of times that range
+	//has appeared
 	int **narr = convertToPointer(arr, m);
 	narr = resizeAndCopy(narr, m);
 	
@@ -69,6 +72,10 @@ int computeRangeOverlap( int arr[][n], int m)
 				incrementedDuplicate = 1;
 				continue; 
 				}
+				
+			//TO DO - implement condition where there is incomplete overlap between two ranges,
+			//add new shrunken range with +1 to increment position
+			else if((narr[range][0] >= narr[j][0]
 			
 			}
 		}
