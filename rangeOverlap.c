@@ -75,6 +75,8 @@ int computeRangeOverlap( int arr[][n], int m)
 				
 			//TO DO - implement condition where there is incomplete overlap between two ranges,
 			//add new shrunken range with +1 to increment position
+			//create a helper function which either adds new range, 
+			//or increments existing one if it already exists 
 			else if((narr[range][0] >= narr[j][0]
 			
 			}
