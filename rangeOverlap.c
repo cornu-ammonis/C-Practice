@@ -49,6 +49,20 @@ int isOverlap(int a[3], int b[3])
 	return ( (a[0] >= b[0] && a[0] <= b[1]) || (a[1] >= b[0] && a[1] <= b[1]) );
 }
 
+int addOrIncrementOverlapRange(int a[3], int b[3], int **arr, int currentPosition)
+{
+	int toAdd[3] = {max(a[0], b[0]), min(a[1], b[1]), a[2] + b[2]};
+	int i;
+	int toReturn = 0;
+	for(i = 0; i < currentPosition; i++) 
+	{
+		if (arr[i][0] == toAdd[0] && arr[i][1] == toAdd[1])
+		{
+			arr[i]
+		}
+	}
+}
+
 int computeRangeOverlap( int arr[][n], int m) 
 	{
 	
@@ -85,7 +99,23 @@ int computeRangeOverlap( int arr[][n], int m)
 			//add new shrunken range with +1 to increment position
 			//create a helper function which either adds new range, 
 			//or increments existing one if it already exists 
-			/*else if((narr[range][0] >= narr[j][0] */
+			else if (isOverlap(narr[range], narr[j])) 
+			{
+				if(currentPosition < currentMax)
+				{
+					addOrIncrementOverlapRange(narr[range], narr[j], currentPosition);
+					currentPosition++;
+				}
+				else 
+				{
+					narr = resizeAndCopy(narr, currentMax);
+					currentPosition = currentMax; //this should already be true
+					currentMax *= 2;
+					addOrIncrementOverlapRange(narr[range], narr[j], currentPosition);
+					currentPosition++;
+					
+				}
+			}
 			
 			}
 		}
