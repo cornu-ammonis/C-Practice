@@ -49,89 +49,95 @@ int isOverlap(int a[3], int b[3])
 	return ( (a[0] >= b[0] && a[0] <= b[1]) || (a[1] >= b[0] && a[1] <= b[1]) );
 }
 
-int addOrIncrementOverlapRange(int a[3], int b[3], int **arr, int currentPosition)
+int** addOverlapRange(int a[3], int b[3], int **arr, int currentPosition)
 {
-	int toAdd[3] = {max(a[0], b[0]), min(a[1], b[1]), a[2] + b[2]};
-	int i;
-	int toReturn = 0;
-	for(i = 0; i < currentPosition; i++) 
-	{
-		if (arr[i][0] == toAdd[0] && arr[i][1] == toAdd[1])
-		{
-			arr[i]
-		}
-	}
+	int toAdd[3] = {MAX(a[0], b[0]), MIN(a[1], b[1]), a[2] + b[2]};
+	arr[currentPosition]= toAdd;
+	return arr;
 }
 
 int computeRangeOverlap( int arr[][n], int m) 
 	{
 	
-	//narr[x][0] and narr[x][1] will be the original range from arr,
-	//narr[x][2] will be the "counter" for the number of times that range
-	//has appeared
-	int **narr = convertToPointer(arr, m);
-	narr = resizeAndCopy(narr, m);
+	//narr[x][0] and narr[x][1] will be a range, narr[x][2] will be
+	// the "counter" for the number of times that range has appeared
+	int **dp = (int**) malloc(m * 2 * sizeof(int*));
+	int i;
+	for(i = 0; i < m*2; i++)
+		dp[i] = calloc(3, sizeof(int));
 	
-	int currentPosition = m; //inclusive - narr[m] is 'empty' (actually all 0s)
+	//pointer to current first available element in dp
+	int dpi = 0; //inclusive - narr[m] is 'empty' (actually all 0s)
 	int currentMax = 2*m; //not inclusive - while i < currentMax
-	
+	int alreadyAdded; //tracks whether alrady added range from parameter
 	int range; // which range in input element we are processing
-	int j; //iterator for dp structure
-	int incrementedDuplicate;
+	
+	
 	for (range = 0; range < m; range++) 
+	{
+		alreadyAdded = 0;
+		int toAdd[3] = {arr[range][0], arr[range][1], 1};
+		int loopCeiling = dpi; //distinct from dpi because dpi may increment in loop
+		for(i = 0; i < loopCeiling; i++) 
 		{
-		incrementedDuplicate = 0;
-		
-		//loop through all ranges ahead of our current range
-		for(j = range + 1; j < currentMax; j++) 
+			//if this exact range is already in dp
+			if(dp[i][0] == arr[range][0] && dp[i][1] == arr[range][1])
 			{
-				
-			//if they are the same range and we havent met another copy
-			//of same range, increment count and continue
-			if(narr[range][0] == narr[j][0] && narr[range][1] == narr[j][1] && !incrementedDuplicate) 
-				{
-				narr[j][2] = narr[j][2] + narr[range][2];
-				incrementedDuplicate = 1;
-				continue; 
-				}
-				
-			//TO DO - implement condition where there is incomplete overlap between two ranges,
-			//add new shrunken range with +1 to increment position
-			//create a helper function which either adds new range, 
-			//or increments existing one if it already exists 
-			else if (isOverlap(narr[range], narr[j])) 
-			{
-				if(currentPosition < currentMax)
-				{
-					addOrIncrementOverlapRange(narr[range], narr[j], currentPosition);
-					currentPosition++;
-				}
-				else 
-				{
-					narr = resizeAndCopy(narr, currentMax);
-					currentPosition = currentMax; //this should already be true
-					currentMax *= 2;
-					addOrIncrementOverlapRange(narr[range], narr[j], currentPosition);
-					currentPosition++;
-					
-				}
+				dp[i][2] += 1; //increment the count
+				alreadyAdded = 1; //mark we've already added this range
+				continue;
 			}
 			
+			else
+			{
+				if(isOverlap(dp[i], toAdd))
+				{
+					
+				//resizes dynamic programming structure if needed
+					if ( dpi >= currentMax)
+					{
+						dp = resizeAndCopy(dp, currentMax);
+						currentMax *= 2;
+					}
+				
+					dp = addOverlapRange(dp[i], toAdd, dp, dpi);
+					dpi++;
+				} 
 			}
 		}
+		if(!alreadyAdded) 
+		{
+			if (dpi >= currentMax)
+			{
+				dp = resizeAndCopy(dp, currentMax);
+				currentMax *= 2;
+			}
+			
+			dp[dpi++] = toAdd;
+		}
+		
+	}
 	
-	
-	
-	return 1;
+	int currentAns = dp[0][0];
+	int currentMaxCount = dp[0][2];
+	for (i = 0; i < dpi; i++)
+	{
+		if(dp[i][2] > currentMaxCount) 
+		{
+			currentMaxCount = dp[i][2];
+			currentAns = dp[i][0];
+		}
+	}
+	return currentAns;
 	
 	
 	}
 	
 int main() 
 {
-	int arr2[][3] = {{0, 3, 0}, {-5, 2, 0}, {1, 2, 0}, {0, 1, 0}, {7, 8, 0}};
+	//int arr2[][3] = {{0, 3, 0}, {-5, 2, 0}, {1, 2, 0}, {0, 1, 0}, {7, 8, 0}};
 	int arr[][2] = {{0, 1}, {2,3}, {4,5}, {6,7}};
-	//return computeRangeOverlap(arr, sizeof(arr)/sizeof(arr[0]));
+	/*//return computeRangeOverlap(arr, sizeof(arr)/sizeof(arr[0]));
 	
 	int **tarr;
 	tarr = convertToPointer(arr, sizeof(arr)/sizeof(arr[0]));
@@ -147,7 +153,9 @@ int main()
 	printf("\n %d ", isOverlap(arr2[3], arr2[2]));
 	printf("\n %d ", isOverlap(arr2[3], arr2[4]));
 	printf("\n %d ", isOverlap(tarr[1], tarr[2]));
-	printf("\n %d ", isOverlap(tarr[1], arr2[2]));
+	printf("\n %d ", isOverlap(tarr[1], arr2[2]));*/
+	int ans = computeRangeOverlap(arr, sizeof(arr)/sizeof(arr[0]));
+	printf("a max overlap number is: %d", ans);
 	return 1;
 	
 }
