@@ -41,6 +41,14 @@ int** convertToPointer(int arr[][n], int m)
 	
 	}
 
+//takes two arrays and returns true if there is any overlap between the
+//range represented by the first 2 elements of each array
+//else returns false (1 and 0 respectively)
+int isOverlap(int a[3], int b[3])
+{
+	return ( (a[0] >= b[0] && a[0] <= b[1]) || (a[1] >= b[0] && a[1] <= b[1]) );
+}
+
 int computeRangeOverlap( int arr[][n], int m) 
 	{
 	
@@ -77,7 +85,7 @@ int computeRangeOverlap( int arr[][n], int m)
 			//add new shrunken range with +1 to increment position
 			//create a helper function which either adds new range, 
 			//or increments existing one if it already exists 
-			else if((narr[range][0] >= narr[j][0]
+			/*else if((narr[range][0] >= narr[j][0] */
 			
 			}
 		}
@@ -91,7 +99,7 @@ int computeRangeOverlap( int arr[][n], int m)
 	
 int main() 
 {
-	//int arr[][2] = {{0, 3}, {-5, 2}, {1, 2}, {0, 1}};
+	int arr2[][3] = {{0, 3, 0}, {-5, 2, 0}, {1, 2, 0}, {0, 1, 0}, {7, 8, 0}};
 	int arr[][2] = {{0, 1}, {2,3}, {4,5}, {6,7}};
 	//return computeRangeOverlap(arr, sizeof(arr)/sizeof(arr[0]));
 	
@@ -102,7 +110,14 @@ int main()
 	for(i = 0; i < (sizeof(arr)/sizeof(arr[0])) * 2; i++)
 		for(j = 0; j < 3; j++)
 			printf("%d ", tarr[i][j]);
-			
+	
+	printf("\n %d ", isOverlap(arr2[1], arr2[2]));
+	printf("\n %d ", isOverlap(arr2[2], arr2[1]));
+	printf("\n %d ", isOverlap(arr2[2], arr2[3]));
+	printf("\n %d ", isOverlap(arr2[3], arr2[2]));
+	printf("\n %d ", isOverlap(arr2[3], arr2[4]));
+	printf("\n %d ", isOverlap(tarr[1], tarr[2]));
+	printf("\n %d ", isOverlap(tarr[1], arr2[2]));
 	return 1;
 	
 }
