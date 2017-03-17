@@ -18,40 +18,66 @@ int ParseInt(const char *s,int *i)
     return 1;
  }
 
+//recursively determines whether the given ip is valid
+// @param ip - character array of length 
+// @param len - length of ip
+// @param start - starting index to parse char array - so that recursive
+// calls do not need to rebuild the string
 int IPv4(char* ip, int len, int start) 
 {
 	
+	//if we have gotten to the end of the string
 	if(len == start)
 		return 1; //base case
+	
+	//skips a leading period
 	if (ip[start] == '.')
 		start++;
-		
+	
+	//loops until we reach a period or the end of string -- 
+	//to find the end of the numbers segment to parse
 	int i = start;
 	while(i < len && ip[i] != '.')
 		i++;
 	
+	//n represents the length of our target substring
 	int n = i - start;
 	char* sub = (char*) malloc(sizeof(char)*n+1);
-	int j = 0;
-	int k;
-	
+	int j = 0; // indexer for substring 
+	int k; //indexer for substring within original string
+
+	//builds substring
 	for(k = start; k < i; k++)
 	{
 		sub[j++] = ip[k];
 	}
-	sub[n] = '\0';
+	sub[n] = '\0'; //null terminates
 	
+	//leading zero is a special case - must be followed by 
+	//end of string or a . to be valid
+	if(sub[0] == '0')
+	{
+		if(n > 1 && sub[1] != '.')
+			return 0;
+		else
+			return IPv4(ip, len, i);
+	}
+	
+	//pointer into which parse int will place the integer which the 
+	//substring represents
 	int* subInt = malloc(sizeof(int));
 	
+	//ParseInt returns 0 if could not parse an integer from given string
 	if(!ParseInt(sub, subInt))
 	{
 		printf("Something went wrong! exiting..");
 		return 0;
 	}
 	
+	//integer must be in range [0,255]
 	if(*subInt < 0 || *subInt > 255)
 		return 0;
-	return IPv4(ip, len, i);
+	return IPv4(ip, len, i); //recursive call for next substring 
 	
 	
 	
@@ -116,7 +142,7 @@ char* validIPAddress(char* IP)
 int main(void) 
 {
 	printf("hello \n");
-	char* test = "255.256.255.255";
+	char* test = "255.0.0.0";
 	if(IPv4(test, strlen(test), 0))
 		printf("it worked!\n");
 	else
