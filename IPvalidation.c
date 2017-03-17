@@ -26,13 +26,50 @@ char* validIPAddress(char* IP)
 	if(!((dotCount == 3 ^ colonCount == 7) && (dotCount > 0 ^ colonCount > 0)))
 		return "Neither";
 	
+	if(dotCount > 0)
+		return IPv4(IP, len, 0);
+	else
+		return IPv6(IP);
 	
-	return len;
+	return "Neither";
     
+}
+int IPv4(char* ip, int len, int start){
+	return 1;}
+	
+int IPv6(char* ip, int len, int start){
+	return 1;}
+
+char* IPv5(char* ip, int len, int start) 
+{
+	
+	if(len == start)
+		return 1; //base case
+	if (ip[start] == '.')
+		start++;
+		
+	int i = start;
+	while(i < len && ip[i] != '.')
+		i++;
+	
+	int n = i - start;
+	char* sub = (char*) malloc(sizeof(char)*n+1);
+	int j = 0;
+	int k;
+	
+	for(k = start; k < i; k++)
+	{
+		sub[j++] = ip[k];
+	}
+	sub[n] = '\0';
+	return sub;
+	
+	
 }
 
 int main(void) 
 {
-	printf("Returned Length is %d ", validIPAddress("abcdefg"));
+	char* test = "11.12.1.11.1";
+	printf(IPv5(test, strlen(test), 0));
 	return 1;
 }
