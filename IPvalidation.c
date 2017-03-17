@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 
 
@@ -25,7 +26,6 @@ int ParseInt(const char *s,int *i)
 // calls do not need to rebuild the string
 int IPv4(char* ip, int len, int start) 
 {
-	
 	//if we have gotten to the end of the string
 	if(len == start)
 		return 1; //base case
@@ -83,8 +83,40 @@ int IPv4(char* ip, int len, int start)
 	
 }
 
-int IPv6(char* ip, int len, int start){
-	return 1;}
+int IPv6(char* ip, int len, int start)
+{
+printf("madeit\n");
+	if(len == start) //base case
+		return 1;
+	if(ip[start] == ':') //handles leading :
+		start++;
+	
+	int i = start;
+	while(i < len && ip[i] != ':')
+		i++;
+	
+	int n = i - start;
+	
+	char* sub = (char*) malloc(sizeof(char) * n+1);
+	int j = 0; // indexer for substring 
+	int k; //indexer for substring within original string
+	
+	//builds substring
+	for(k = start; k < i - 1; k++)
+	{
+		//returns 0 if any part of the substring is not a valid 
+		//hex character
+		if(isxdigit(ip[k]) == 0)
+			return 0;
+		sub[j++] = ip[k];
+	}
+
+	sub[n] = '\0'; //null terminates
+	printf("madeit\n");
+
+	return 1;
+
+}
 
 char* validIPAddress(char* IP) 
 {
@@ -141,14 +173,18 @@ char* validIPAddress(char* IP)
 
 int main(void) 
 {
-	printf("hello \n");
-	char* test = "255.0.0.0";
-	if(IPv4(test, strlen(test), 0))
-		printf("it worked!\n");
+	
+	printf("assigning character");
+	char* test1 = "85y3";
+	printf("calling IPv6");
+	int len = strlen(test1);
+	int ans = IPv6(test1, len, 0);
+	if(ans == 1)
+		printf("it worked!");
 	else
-		printf(" :( ");
-	printf(validIPAddress(test));
+		printf("no!");
 	return 1;
+	
 }
 
 
