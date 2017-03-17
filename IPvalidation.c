@@ -77,6 +77,8 @@ char* validIPAddress(char* IP)
 			dotCount++;
 		else if (IP[i] == ':')
 			colonCount++;
+		else if (IP[i] == '-')
+			return "Neither";
 	}
 	
 	//there must be exactly 3 periods xor 7 colons, and only one may be greater
@@ -85,9 +87,20 @@ char* validIPAddress(char* IP)
 		return "Neither";
 	
 	if(dotCount > 0)
-		return IPv4(IP, len, 0);
+	{
+		if (IPv4(IP, len, 0))
+			return "IPv4";
+		else
+			return "Neither";
+	}
+		
 	else
-		return IPv6(IP, len, 0);
+	{
+		if (IPv6(IP, len, 0))
+			return "IPv6";
+		else
+			return "Neither";
+	}
 	
 	return "Neither";
     
@@ -102,11 +115,13 @@ char* validIPAddress(char* IP)
 
 int main(void) 
 {
-	char* test = "255.255.255.255.255";
+	printf("hello \n");
+	char* test = "255.256.255.255";
 	if(IPv4(test, strlen(test), 0))
-		printf("valid!");
+		printf("it worked!\n");
 	else
-		printf("Invalid or error!");
+		printf(" :( ");
+	printf(validIPAddress(test));
 	return 1;
 }
 
