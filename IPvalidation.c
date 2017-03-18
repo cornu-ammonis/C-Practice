@@ -85,7 +85,7 @@ int IPv4(char* ip, int len, int start)
 
 int IPv6(char* ip, int len, int start)
 {
-printf("madeit\n");
+
 	if(len == start) //base case
 		return 1;
 	if(ip[start] == ':') //handles leading :
@@ -102,19 +102,40 @@ printf("madeit\n");
 	int k; //indexer for substring within original string
 	
 	//builds substring
-	for(k = start; k < i - 1; k++)
+	for(k = start; k < i; k++)
 	{
 		//returns 0 if any part of the substring is not a valid 
 		//hex character
-		if(isxdigit(ip[k]) == 0)
+		if(isxdigit(ip[k]) == 0) {
+			printf("not hex\n");
 			return 0;
+			
+			}
+			
 		sub[j++] = ip[k];
 	}
 
 	sub[n] = '\0'; //null terminates
-	printf("madeit\n");
+	if (strlen(sub) > 4) {
+		printf("too long!\n");
+		return 0;
+		}
+		
+	/*
+	if(strlen(sub) < 4) {
+		
+		if (sub[0] != '0'){
+			printf(sub);
+			printf(" too short!\n");
+			return 0;
+			}
+			
+		}*/
+		
+	printf("recursive call!\n");
+	return IPv6(ip, len, i);
 
-	return 1;
+	
 
 }
 
@@ -124,17 +145,25 @@ char* validIPAddress(char* IP)
 	
 	if(len == 0)
 		return "Neither";
+	if(IP[0] == '.' || IP[len-1] == '.' || IP[0] == ':' || IP[len-1] == ':')
+		return "Neither";
 	
 	int i;
 	int dotCount = 0; //counts periods in string
 	int colonCount = 0; //counts colons in string
 	
-	for(i = 0; i < len; i++)
+	for(i = 0; i < len-1; i++)
 	{
 		if (IP[i] == '.')
-			dotCount++;
+			if(IP[i+1] == '.')
+				return "Neither";
+			else
+				dotCount++;
 		else if (IP[i] == ':')
-			colonCount++;
+			if(IP[i+1] == ':')
+				return "Neither";
+			else
+				colonCount++;
 		else if (IP[i] == '-')
 			return "Neither";
 	}
@@ -174,15 +203,25 @@ char* validIPAddress(char* IP)
 int main(void) 
 {
 	
-	printf("assigning character");
-	char* test1 = "85y3";
-	printf("calling IPv6");
+	printf("assigning character\n");
+	char* test1 = "85a3";
+	printf("calling IPv6\n");
 	int len = strlen(test1);
 	int ans = IPv6(test1, len, 0);
 	if(ans == 1)
-		printf("it worked!");
+		printf("it worked!\n");
 	else
-		printf("no!");
+		printf("no!\n");
+		
+	char* test2 = "2001:db8:85a3:0::8A2E:0370:7334";
+	int len2 = strlen(test2);
+	int ans2 = IPv6(test2, len2, 0);
+	if(ans2 == 1)
+		printf("it worked again!\n");
+	else
+		printf("it didnt work!\n");
+	
+	printf(validIPAddress("172.16.0.254"));
 	return 1;
 	
 }
