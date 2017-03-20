@@ -19,20 +19,26 @@ struct ListNode* deleteDuplicates(struct ListNode* head) {
         
     }
     return head;
+  
     
 }
 
 int main()
 {
-	struct ListNode* a = malloc(sizeof(struct ListNode));
+	struct ListNode* a = calloc(1, sizeof(struct ListNode));
   a->val = 4;
-  struct ListNode* b = malloc(sizeof(struct ListNode));
+  if(a->next != NULL)
+  printf("crash? %d", a->next->val);
+  struct ListNode* b = calloc(1, sizeof(struct ListNode));
   b->val = 4;
   a->next = b;
-  struct ListNode* c = malloc(sizeof(struct ListNode));
-  c->val = 5;
+  struct ListNode* c = calloc(1, sizeof(struct ListNode));
+  c->val = 4;
   b->next = c;
+  struct ListNode* d = calloc(1, sizeof(struct ListNode));
+  d->val = 6;
+  c->next = d;
   struct ListNode* e = deleteDuplicates(a);
-  printf("value is %d ", e->val);
+  printf("value is %d and %d ", e->val, e->next->val);
   return 1;
 }
