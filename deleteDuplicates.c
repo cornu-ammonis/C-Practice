@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
   struct ListNode {
       int val;
@@ -21,5 +24,8 @@ struct ListNode* deleteDuplicates(struct ListNode* head) {
 
 int main()
 {
-	
+	struct ListNode* a = malloc(sizeof(struct ListNode));
+  a->val = 4;
+  printf("value is %d ", a->val);
+  return 1;
 }
