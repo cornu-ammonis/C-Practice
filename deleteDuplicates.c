@@ -26,6 +26,13 @@ int main()
 {
 	struct ListNode* a = malloc(sizeof(struct ListNode));
   a->val = 4;
-  printf("value is %d ", a->val);
+  struct ListNode* b = malloc(sizeof(struct ListNode));
+  b->val = 4;
+  a->next = b;
+  struct ListNode* c = malloc(sizeof(struct ListNode));
+  c->val = 5;
+  b->next = c;
+  struct ListNode* e = deleteDuplicates(a);
+  printf("value is %d ", e->val);
   return 1;
 }
